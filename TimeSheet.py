@@ -45,4 +45,4 @@ class TimeSheetReport:  # Automatically Clocked times
             else:
                 self.employeeHours[emp] = {"name": name, date: runHours}
                 
-        # os.remove(reportFile)
+        os.remove(reportFile)

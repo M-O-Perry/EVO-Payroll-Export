@@ -54,7 +54,7 @@ class ShiftReport:  # Manually entered shifts
             else:
                 self.employeeEntriesData[emp] = {"name": name, date: [(type, operation, hours)]}
             
-        # os.remove(reportFile)
+        os.remove(reportFile)
 
     def organize_labor(self):
         for empID in self.employeeEntriesData:

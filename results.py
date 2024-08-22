@@ -61,6 +61,7 @@ class ReportOutput:
         # ws.append(["Employee ID", "Name", "Regular Hours", "Overtime Hours", "Double Time Hours", "Vacation Hours", "Sick Hours", "Holiday Hours", "Personal Hours", "Total Hours"])
         ws.append(["ID", "Name", "REG", "OT", "DT", "VAC", "SICK", "HOL", "PER", "Total"])
         
+        # print(self.shiftSummary)
         totalTimes = [0] * len(self.shiftSummary[list(self.shiftSummary.keys())[0]][1:-1])
         
         for emp in self.shiftSummary:
@@ -276,6 +277,8 @@ class ReportOutput:
                     top = thick
                     bottom = medium
                     cell.font = Font(size=12)
+                    # freeze the top row
+                    ws.freeze_panes = ws["A4"]
                     
                 if cell.row == ws.max_row:
                     bottom = thick

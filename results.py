@@ -56,7 +56,10 @@ class ReportOutput:
         wb = Workbook()
         ws = wb.active
         
-        ws.append(["Employee ID", "Name", "Regular Hours", "Overtime Hours", "Double Time Hours", "Vacation Hours", "Sick Hours", "Holiday Hours", "Personal Hours", "Total Hours"])
+        ws.title = "Summary"
+        
+        # ws.append(["Employee ID", "Name", "Regular Hours", "Overtime Hours", "Double Time Hours", "Vacation Hours", "Sick Hours", "Holiday Hours", "Personal Hours", "Total Hours"])
+        ws.append(["ID", "Name", "REG", "OT", "DT", "VAC", "SICK", "HOL", "PER", "Total"])
         
         totalTimes = [0] * len(self.shiftSummary[list(self.shiftSummary.keys())[0]][1:-1])
         
@@ -125,6 +128,9 @@ class ReportOutput:
             allEntryDates = sorted(list(allEntryDates))
             if "name" in allEntryDates:
                 allEntryDates.remove("name")
+                
+            everyShiftHour = []
+            everyClockHour = []
             
             for date in allEntryDates:
                 
@@ -143,6 +149,9 @@ class ReportOutput:
                 output.append(clockHours)
                 output.append(shiftHours)
                 
+                everyShiftHour.append(shiftHours)
+                everyClockHour.append(clockHours)
+                
                 overReportedEpsilon = 0.25
                 underReportedEpsilon = -1
                 
@@ -155,6 +164,8 @@ class ReportOutput:
                     output.append("Under-reported")
                 
                 ws.append(output)
+            
+            ws.append(["", "Total", sum(everyClockHour), sum(everyShiftHour)])
                 
             ws.append([])
             
@@ -231,15 +242,19 @@ class ReportOutput:
         wb = load_workbook(self.EVO_file_path)
         ws = wb.active
         
-        self.__formatSheet(ws)
+        self.__formatSheet(ws, False)
+        
+        self.addPayPeriod(ws)
         
         ws = wb['Detailed Comparison']
-        self.__formatSheet(ws)
+        self.__formatSheet(ws, True)
+        
+        self.addPayPeriod(ws)
         
         
         wb.save(self.EVO_file_path)
         
-    def __formatSheet(self, ws):
+    def __formatSheet(self, ws, autoSize):
         thin = Side(style = 'thin')
         medium = Side(style = 'medium')
         thick = Side(style = 'thick')
@@ -273,6 +288,9 @@ class ReportOutput:
                         right = medium
                         cell.font = Font(size = 12)
                         
+                    if cell.row != 1 and cell.row != 2:
+                        cell.alignment = cell.alignment.copy(horizontal = "center")
+                        
                 if cell.column == ws.max_column:
                     right = thick
                     
@@ -285,6 +303,23 @@ class ReportOutput:
                 
                 cell.border = Border(top = top, left = left, right = right, bottom = bottom)
                 
+        if autoSize:        
+            for col, value in dims.items():
+                ws.column_dimensions[chr(64+col)].width = value + 2
+        else:
+            for col in ws.columns:
+                col_width = 6
+                
+                ws.column_dimensions[col[0].column_letter].width = col_width
+                
+            ws.column_dimensions["B"].width = 25
+            
         
-        for col, value in dims.items():
-            ws.column_dimensions[chr(64+col)].width = value + 2
+        
+    def addPayPeriod(self, ws):
+        
+        ws.insert_rows(1, 2)
+        
+        ws["A1"] = "Pay Period: " + self.__formatDate(self.start_date) + " - " + self.__formatDate(self.end_date)
+        
+        

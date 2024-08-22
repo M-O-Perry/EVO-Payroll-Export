@@ -1,4 +1,4 @@
-('C:\\Users\\rahmadizadeh\\Desktop\\Scripts\\EVOPayrollToADP\\build\\EVOPayrollToADP\\PYZ-00.pyz',
+('C:\\Users\\rahmadizadeh\\Documents\\GitHub\\EVO-Payroll-Export\\EVOPayrollToADP\\build\\EVOPayrollToADP\\PYZ-00.pyz',
  [('PIL',
    'C:\\Users\\rahmadizadeh\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PIL\\__init__.py',
    'PYMODULE'),

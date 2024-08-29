@@ -88,12 +88,14 @@ class ReportOutput:
                     
                 totalTimes[i-1] += hour
             regHour = round(hours[1]*4)/4
-            output.append(regHour + sum(hours[2:-1]))
+            # output.append(regHour + sum(hours[2:-1]))
+            output.append("=SUM(C" + str(ws.max_row + 3) + ":I" + str(ws.max_row + 3) + ")")
             
             ws.append(output)
             
         ws.append([])
-        ws.append(["Total:", "", *totalTimes, sum(totalTimes)])
+        # ws.append(["Total:", "", *totalTimes, sum(totalTimes)])
+        ws.append(["Total:", "", "=SUM(C4:C" + str(ws.max_row + 2) + ")", "=SUM(D4:D" + str(ws.max_row + 2) + ")", "=SUM(E4:E" + str(ws.max_row + 2) + ")", "=SUM(F4:F" + str(ws.max_row + 2) + ")", "=SUM(G4:G" + str(ws.max_row + 2) + ")", "=SUM(H4:H" + str(ws.max_row + 2) + ")", "=SUM(I4:I" + str(ws.max_row + 2) + ")", "=SUM(J4:J" + str(ws.max_row + 2) + ")"])
         
             
         
@@ -133,6 +135,8 @@ class ReportOutput:
             everyShiftHour = []
             everyClockHour = []
             
+            firstRow = ws.max_row 
+            
             for date in allEntryDates:
                 
                 shiftHours = 0
@@ -166,7 +170,8 @@ class ReportOutput:
                 
                 ws.append(output)
             
-            ws.append(["", "Total", sum(everyClockHour), sum(everyShiftHour)])
+            # ws.append(["", "Total", sum(everyClockHour), sum(everyShiftHour)])
+            ws.append(["", "Total", "=SUM(C" + str(firstRow + 3) + ":C" + str(ws.max_row + 2) + ")", "=SUM(D" + str(firstRow + 3) + ":D" + str(ws.max_row + 2) + ")"])
                 
             ws.append([])
             
@@ -311,7 +316,7 @@ class ReportOutput:
                 ws.column_dimensions[chr(64+col)].width = value + 2
         else:
             for col in ws.columns:
-                col_width = 6
+                col_width = 7
                 
                 ws.column_dimensions[col[0].column_letter].width = col_width
                 
@@ -323,6 +328,6 @@ class ReportOutput:
         
         ws.insert_rows(1, 2)
         
-        ws["A1"] = "Pay Period: " + self.__formatDate(self.start_date) + " - " + self.__formatDate(self.end_date)
+        ws["A1"] = "PAY PERIOD: " + self.__formatDate(self.start_date) + " - " + self.__formatDate(self.end_date)
         
         
